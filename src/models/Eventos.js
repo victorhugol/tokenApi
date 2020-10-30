@@ -1,31 +1,27 @@
-const mongoose = require("../database/connection");
+const mongoose = require('../database/connection');
 const {Schema} = mongoose;
 
 
 const EventoSchema = new Schema({
+    titulo : {
+        type : String,
+        required : true,
+    },
     descricao : {
         type : String,
         required : true,
     },
-    dataInicio : {
-        type : String,
-        required : true,
-    },
-    dataFim : {
-        type : String,
-        required : true,
-    },
-    horarioInicio : {
-        type : String,
-        required : true,
-    },
-    horarioFim : {
-        type: String,
-        required :true,
+    comeco : {
+        dia : Number,
+        mes: Number,
+        ano : Number
     }
+
 });
+
+
+
 
 const EventoModel = mongoose.model('Evento',EventoSchema);
 
-
-module.exports = EventoModel;
+module.exports = {EventoModel, EventoSchema}; 

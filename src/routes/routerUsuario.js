@@ -1,24 +1,35 @@
 const express = require("express");
-const { UsuarioModel } = require("../models/Cadastro");
+const { UsuarioModel } = require("../models/Usuario");
 const routerUsuario = express.Router();
 routerUsuario.use(express.json());
 
 
 routerUsuario.post('/cadastro',async (req,res)=>{
     try{
-        console.log(req);
-        await UsuarioModel.create(req.body);
-        return res.status(200).send({ok:'Usuario Cadastrado'});
+        console.log(req.body);
+
+        const user = await UsuarioModel
+        .find({usuario : req.body.usuario},(err,res)=>{
+            console.log(err);
+        });
+        console.log(user.length);
+        if(user.length == 0){
+            await UsuarioModel.create(req.body);
+            return res.status(200).send({ok : "Usuario Cadastrado"});
+        }
+        else{
+            return res.status(400).send({fail:'Usuario ja existe!'});
+        }
+
     }catch(err){
         return res.status(400).send({erro : err});
     }
 });
 
-
 routerUsuario.post('/login',async (req,res)=>{
     try{
         const user = await UsuarioModel
-        .find({nome : req.body.nome, senha : req.body.senha},(err,res)=>{
+        .find(req.body,(err,res)=>{
             console.log(res);
         });
         if(user.length == 0){
